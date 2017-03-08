@@ -9,19 +9,11 @@ var llazy = (function(doc) {
     } : function(dom, type, listener) {
         dom.attachEvent('on' + type, listener);
     };
-    var toArray = function (arrayLike) {
-        var len = arrayLike.length, res = [], i = 0;
-        for (;i < len; res.push(arrayLike[i++]));
-        return res;
-    };
     // 表示“载入”状态，用随机数确保不会与 img 其他自定义属性冲突
     var tempLoading = Math.random() + '_loading';
     var LLazy = function(imgs, ops) {
         ops = ops || {};
         imgs = typeof imgs === 'string' ? doc.querySelectorAll(imgs) : imgs;
-        if (!imgs.splice) {
-            imgs = toArray(imgs);
-        }
         var container = ops.container || doc.documentElement;
         if (typeof container === 'string') {
             container = doc.querySelector(container);
@@ -46,15 +38,16 @@ var llazy = (function(doc) {
                 // console.log(cont);
                 for (var i = 0, img, rect; i < imgs.length; i++) {
                     img = imgs[i];
-                    rect = img.getBoundingClientRect();
                     // 在循环中输出内容到控制台，会使最终时间差变得好多倍（FF, IE）
                     // console.log(cross(cont, rect));
-                    // 如果图片出现在可见区，则加载，并将已处于 loading 状态的图片移出待加载列表
-                    if (!img[tempLoading] && cross(cont, rect)) {
-                        img.src = img.getAttribute(originSrc);
-                        img[tempLoading] = true;
-                        // 移出待加载数组
-                        imgs.splice(i, 1);
+                    // 如果图片没有加载过
+                    if (!img[tempLoading]) {
+                        rect = img.getBoundingClientRect();
+                        // 如果图片出现在可见区，则加载，并设置图片 loading 状态
+                        if (cross(cont, rect)) {
+                            img.src = img.getAttribute(originSrc);
+                            img[tempLoading] = true;    
+                        }                        
                     }
                 }
                 // console.log(Date.now() -t);
