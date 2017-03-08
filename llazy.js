@@ -39,7 +39,7 @@ var llazy = (function(doc) {
             // console.log('scrolling');
             clearTimeout(_timer);
             _timer = setTimeout(function () {
-                var t = Date.now();
+                // var t = Date.now();
                 // console.log('do scrolling todo', t);
                 // window 没有 getBoundingClientRect 方法，body 与 root 才有
                 var cont = container.getBoundingClientRect();
@@ -70,7 +70,3 @@ var llazy = (function(doc) {
     LLazy.isCross = cross;
     return LLazy;
 })(document);
-
-// document.documentElement.onscroll = function (e) {
-//     console.log('sssssssssssscroll')
-// }
