@@ -22,7 +22,7 @@ var llazy = (function(doc) {
         var onerror = function(e) {
             e = e || window.event;
             var img = e.target || e.srcElement;
-            img.src = img.getAttribute('data-src');
+            img.src = img.getAttribute(originSrc);
         };
         // console.log(imgs, container);
         // 用 timer 做一个简单的函数节流阀
@@ -47,7 +47,7 @@ var llazy = (function(doc) {
                         if (cross(cont, rect)) {
                             img.src = img.getAttribute(originSrc);
                             img[tempLoading] = true;    
-                        }                        
+                        }
                     }
                 }
                 // console.log(Date.now() -t);
