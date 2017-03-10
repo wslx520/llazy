@@ -19,7 +19,10 @@ llazy('#cont-hor img', {
 	src: 'data-src', // default is 'data-src'
     onload: function (img) {
         // 可以在这里头操作 img，也可以访问其父节点
-        img.style.backgroundColor = '#f00';
+        // img.style.backgroundColor = '#f00';
+        setTimeout(function () {
+            img.className = 'fadeIn';
+        }, 100);
     }
 });
 ```

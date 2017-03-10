@@ -39,6 +39,7 @@
         background-color: #ddd;
         min-width: 50px;
         min-height: 50px;
+        opacity: 0.2;
     }
     #cont-hor .list img {
         max-height: 300px;
@@ -46,6 +47,10 @@
     }
     #cont img {
         display: block;
+    }
+    .fadeIn {
+        opacity: 1;
+        transition: opacity ease-in 1s;
     }
     </style>
 </head>
@@ -185,7 +190,10 @@ llazy('#cont-hor img', {
     // 在触发 load 时，想对 img 做的事
     onload: function (img) {
         // 可以在这里头操作 img，也可以访问其父节点
-        img.style.backgroundColor = '#f00';
+        // img.style.backgroundColor = '#f00';
+        setTimeout(function () {
+            img.className = 'fadeIn';
+        }, 100);
     }
 });
 
