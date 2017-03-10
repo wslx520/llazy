@@ -181,7 +181,12 @@ llazy('#cont img', {
 });
 llazy('#cont-hor img', {
     container: '#cont-hor',
-    src: 'data-src'
+    src: 'data-src',
+    // 在触发 load 时，想对 img 做的事
+    onload: function (img) {
+        // 可以在这里头操作 img，也可以访问其父节点
+        img.style.backgroundColor = '#f00';
+    }
 });
 
     </script>

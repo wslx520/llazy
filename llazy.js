@@ -38,7 +38,7 @@ var llazy = (function(doc) {
                 // console.log(cont);
                 for (var i = 0, img, rect; i < imgs.length; i++) {
                     img = imgs[i];
-                    // 在循环中输出内容到控制台，会使最终时间差变得好多倍（FF, IE）
+                    // 在循环中输出内容到控制台，会使最终时间差变大好多倍（FF, IE）
                     // console.log(cross(cont, rect));
                     // 如果图片没有加载过
                     if (!img[tempLoading]) {
@@ -46,7 +46,11 @@ var llazy = (function(doc) {
                         // 如果图片出现在可见区，则加载，并设置图片 loading 状态
                         if (cross(cont, rect)) {
                             img.src = img.getAttribute(originSrc);
-                            img[tempLoading] = true;    
+                            img[tempLoading] = true;
+                            // 执行 onload 函数
+                            if (typeof ops.onload === 'function') {
+                                ops.onload(img);
+                            }
                         }
                     }
                 }
@@ -63,3 +67,4 @@ var llazy = (function(doc) {
     LLazy.isCross = cross;
     return LLazy;
 })(document);
+
