@@ -11,9 +11,9 @@ llazy 是一个非常简单的图片 lazyload 库。无依赖，不需要构建�
 ### 使用方法
 
 ```javascript
-// no param 'ops', will use default options
+// if no param 'ops', will use default options
 llazy('#cont img');
-// post custom ops
+// post a custom ops
 llazy('#cont-hor img', {
 	container: '#cont-hor', // default is root
 	src: 'data-src', // default is 'data-src'
