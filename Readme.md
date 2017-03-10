@@ -16,7 +16,11 @@ llazy('#cont img');
 // post custom ops
 llazy('#cont-hor img', {
 	container: '#cont-hor', // default is root
-	src: 'data-src' // default is 'data-src'
+	src: 'data-src', // default is 'data-src'
+    onload: function (img) {
+        // 可以在这里头操作 img，也可以访问其父节点
+        img.style.backgroundColor = '#f00';
+    }
 });
 ```
 
