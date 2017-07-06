@@ -24,28 +24,47 @@ var llazy = (function(doc) {
             var img = e.target || e.srcElement;
             img.src = img.getAttribute(originSrc);
         };
+        var isroot = (container === doc.documentElement || container === doc.body);
         // console.log(imgs, container);
         // 用 timer 做一个简单的函数节流阀
         var _timer = null;
         var onscroll = function(e) {
-            // console.log('scrolling');
+            console.log('scrolling');
             clearTimeout(_timer);
             _timer = setTimeout(function () {
                 // var t = Date.now();
                 // console.log('do scrolling todo', t);
                 // window 没有 getBoundingClientRect 方法，body 与 root 才有
-                var cont = container.getBoundingClientRect();
+                var containerBox = container.getBoundingClientRect();
+                var cont;
+                var viewport = {
+                    width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+                    height: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+                };
+                if (isroot) {
+                    cont = {
+                        left: container.scrollLeft,
+                        right: container.scrollLeft + viewport.width,
+                        top: container.scrollTop,
+                        bottom: container.scrollTop + viewport.height
+                    };
+                } else {
+                    cont = containerBox;
+                }
+                
                 // console.log(cont);
                 for (var i = 0, img, rect; i < imgs.length; i++) {
                     img = imgs[i];
-                    // 在循环中输出内容到控制台，会使最终时间差变大好多倍（FF, IE）
-                    // console.log(cross(cont, rect));
+                    var osrc = img.getAttribute(originSrc);
                     // 如果图片没有加载过
-                    if (!img[tempLoading]) {
+                    if (osrc && !img[tempLoading]) {
                         rect = img.getBoundingClientRect();
+                        // 在循环中输出内容到控制台，会使最终时间差变大好多倍（FF, IE）
+                        console.log(cont, rect, cross(cont, rect));
                         // 如果图片出现在可见区，则加载，并设置图片 loading 状态
+                        // if (cross(cont, rect)) {
                         if (cross(cont, rect)) {
-                            img.src = img.getAttribute(originSrc);
+                            img.src = osrc;
                             img[tempLoading] = true;
                             // 执行 onload 函数
                             if (typeof ops.onload === 'function') {
@@ -60,7 +79,7 @@ var llazy = (function(doc) {
         };
         // document.documentElement 并没有 onscroll事件；document.body 的 onscroll 兼容性也不好
         // 所以，默认 container 是 document.documentElement 或 body 时，则将 onscroll 监听加在 window 上
-        addEvent((container === doc.documentElement || container === doc.body) ? window : container, 'scroll', onscroll);
+        addEvent(isroot ? window : container, 'scroll', onscroll);
         // 初始化时就执行一次 load ，加载出此时已经出现在“可视区”的图片
         onscroll();
     };
